@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloomyBay - Making Every Occasion Blossom</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript"src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+    <!-- Loading Animation -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="logo-container">
+                <div class="flower-icon">🌸</div>
+                <div class="ping-animation">🌸</div>
+            </div>
+            <h1 class="loading-title">BloomyBay</h1>
+            <p class="loading-tagline">👉 Making Every Occasion Blossom</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header" class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="flower-icon">🌸</span>
+                    <h1>BloomyBay</h1>
+                </div>
+                
+                <nav class="nav desktop-nav">
+                    <a href="#home">Home</a>
+                    <a href="#products">Products</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                    <button class="cart-btn">
+                        <span class="cart-icon">🛒</span>
+                        <span class="cart-text">Cart (<span class="cart-count">0</span>)</span>
+                    </button>
+                </nav>
+
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+
+            <nav class="mobile-nav" id="mobile-nav">
+                <a href="#home">Home</a>
+                <a href="#products">Products</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <button class="cart-btn">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-text">Cart (<span class="cart-count">0</span>)</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="close-cart-btn" id="close-cart-btn">✕</button>
+        </div>
+        <div class="cart-content">
+            <div id="cart-items" class="cart-items">
+                <div class="empty-cart">
+                    <div class="empty-cart-icon">🛒</div>
+                    <p>Your cart is empty</p>
+                    <small>Add some delicious cakes to get started!</small>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal">₹0</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Delivery:</span>
+                        <span id="cart-delivery">₹50</span>
+                    </div>
+                    <div class="total-row total-final">
+                        <span>Total:</span>
+                        <span id="cart-total">₹50</span>
+                    </div>
+                </div>
+                <button id="place-order-btn" class="place-order-btn" disabled>
+                    <span>📦</span>
+                    <span>Place Order</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="cart-overlay"></div>
+
+    <!-- Order Modal -->
+    <div id="order-modal" class="order-modal">
+        <div class="order-modal-content">
+            <div class="order-modal-header">
+                <h3>Complete Your Order</h3>
+                <button class="close-modal-btn" id="close-order-modal">✕</button>
+            </div>
+            <form id="order-form" class="order-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customer-name">Full Name *</label>
+                        <input type="text" id="customer-name" name="customerName" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-email">Email *</label>
+                        <input type="email" id="customer-email" name="customerEmail" required placeholder="your.email@example.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customer-phone">Phone Number *</label>
+                        <input type="tel" id="customer-phone" name="customerPhone" required placeholder="+91 98765 43210">
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-date">Delivery Date *</label>
+                        <input type="date" id="delivery-date" name="deliveryDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="delivery-address">Delivery Address *</label>
+                    <textarea id="delivery-address" name="deliveryAddress" required rows="3" placeholder="Enter complete delivery address with pincode"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="special-instructions">Special Instructions</label>
+                    <textarea id="special-instructions" name="specialInstructions" rows="2" placeholder="Any special requests or instructions (optional)"></textarea>
+                </div>
+                <div class="order-summary">
+                    <h4>Order Summary</h4>
+                    <div id="order-items-summary" class="order-items-summary"></div>
+                    <div class="order-total-summary">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="order-subtotal">₹0</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Delivery:</span>
+                            <span>₹50</span>
+                        </div>
+                        <div class="total-row total-final">
+                            <span>Total Amount:</span>
+                            <span id="order-total">₹50</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="confirm-order-btn">
+                    <span>✅</span>
+                    <span>Confirm Order</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Success Modal -->
+    <div id="success-modal" class="success-modal">
+        <div class="success-modal-content">
+            <div class="success-icon">🎉</div>
+            <h3>Order Placed Successfully!</h3>
+            <p>Thank you for your order! We've sent confirmation emails to you and our team. We'll contact you soon to confirm the delivery details.</p>
+            <button id="close-success-modal" class="success-btn">Continue Shopping</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background"></div>
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to BloomyBay</h1>
+                <p class="hero-subtitle">Fresh Blooms, Sweet Delights, Happy Moments.</p>
+                <button class="shop-now-btn">
+                    <span>Shop Now</span>
+                    <span class="arrow">→</span>
+                </button>
+            </div>
+        </div>
+        <div class="hero-fade"></div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Sweet Collection</h2>
+                <p>Discover our handcrafted cakes, each one made with love and the finest ingredients</p>
+            </div>
+
+<div class="products-grid">
+
+   
+
+<div class="products-grid">
+
+  <div class="products-grid">
+
+    
+
+    <!-- 4 -->
+    <div class="product-card" data-index="3">
+        <div class="product-image">
+            <img src="/cakes img/4e28db0c139d4e4ab5ca447ec4109baa.jpg" alt="Oreo Cream Layered Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Oreo Cream Layered Cake – 1.5 kg</h3>
+            <p>Creamy cookies-and-cream layers with chocolate accents and Oreo cookie topping.</p>
+            <div class="product-footer">
+                <span class="price">₹3960</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="product-card" data-index="4">
+        <div class="product-image">
+            <img src="/cakes img/ff769ef2ef72bc3e0a78c02959f4ad79.jpg" alt="Oreo Mini Celebration Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Oreo Mini Celebration Cake – 1 kg</h3>
+            <p>Compact Oreo-inspired cake finished with cookie crumbs — great for small gatherings.</p>
+            <div class="product-footer">
+                <span class="price">₹2640</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="product-card" data-index="5">
+        <div class="product-image">
+            <img src="/cakes img/454be0ed097b94aadec94ba055ca5c94.jpg" alt="Half & Half Gold Splatter Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Half &amp; Half Gold Splatter Cake – 2 kg</h3>
+            <p>Modern half-and-half buttercream finish with edible gold splatter for an elegant statement.</p>
+            <div class="product-footer">
+                <span class="price">₹6000</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="product-card" data-index="7">
+        <div class="product-image">
+            <img src="/cakes img/1e5f4354b2d14cfdd152bc0d3c3fe5c5.jpg" alt="Red Velvet Slice Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Classic Red Velvet Cake – 1 kg</h3>
+            <p>Rich red velvet layers with cream cheese frosting, perfect for birthdays and anniversaries.</p>
+            <div class="product-footer">
+                <span class="price">₹2750</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="product-card" data-index="8">
+        <div class="product-image">
+            <img src="/cakes img/418cb687fe1dc402be60073f2bda0d24.jpg" alt="Classic Red Rose Bouquet">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Premium Red Rose Bouquet – 50 stems</h3>
+            <p>Hand-tied large red rose bouquet wrapped in white paper with a red satin ribbon — statement romance.</p>
+            <div class="product-footer">
+                <span class="price">₹7200</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="product-card" data-index="9">
+        <div class="product-image">
+            <img src="/cakes img/fe34a970fe759bf3697064b5dcc6a94c.jpg" alt="Huge Red Rose Presentation">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Grand Red Rose Bouquet – 150 stems</h3>
+            <p>An extra-large bouquet of premium roses for grand gestures and special celebrations.</p>
+            <div class="product-footer">
+                <span class="price">₹10000</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="product-card" data-index="10">
+        <div class="product-image">
+            <img src="/cakes img/3c1b8472e719b7bc10b644caf2d36003.jpg" alt="Romantic Red Rose Surprise Bouquet">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Romantic Red Rose Surprise – 100 stems</h3>
+            <p>Hand-arranged roses with decorative greens, wrapped for an elegant handover.</p>
+            <div class="product-footer">
+                <span class="price">₹8200</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="product-card" data-index="11">
+        <div class="product-image">
+            <img src="/cakes img/c4c713ee26c792ed345ff37f349e23f1.jpg" alt="Classic Rose & Gypsophila Bouquet">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Classic Rose &amp; Gypsophila Bouquet – 10 stems</h3>
+            <p>Simple and classy rose bouquet accented with baby’s breath — perfect for any occasion.</p>
+            <div class="product-footer">
+                <span class="price">₹1600</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="product-card" data-index="12">
+        <div class="product-image">
+            <img src="/cakes img/59baf5853213b8c9c85831c4b92874a2.jpg" alt="Assorted Dessert Table Styling">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Assorted Mini Desserts Platter – Serves 6</h3>
+            <p>A curated selection of mini cakes, tarts and pastries — great as an add-on to celebrations.</p>
+            <div class="product-footer">
+                <span class="price">₹1800</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 13 -->
+    <div class="product-card" data-index="13">
+        <div class="product-image">
+            <img src="/cakes img/5999dd1616fad78bb3ada320b9c6e0c4.jpg" alt="Assorted Pastry & Sweet Box">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Assorted Patisserie Box – 8 pieces</h3>
+            <p>Handpicked small pastries and chocolates presented in a decorative box.</p>
+            <div class="product-footer">
+                <span class="price">₹1400</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 14 -->
+    <div class="product-card" data-index="14">
+        <div class="product-image">
+            <img src="/cakes img/416fe3011231f23cacbfef510e197e00.jpg" alt="Sunflower & Gypsophila Black Wrap Bouquet">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Sunflower Accent Bouquet – 6 stems</h3>
+            <p>Bright sunflowers paired with baby’s breath in a modern black wrap for a bold contrast.</p>
+            <div class="product-footer">
+                <span class="price">₹1500</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 15 -->
+    <div class="product-card" data-index="15">
+        <div class="product-image">
+            <img src="/cakes img/9370e3f359041ff4e3ae470e15e8a4cd.jpg" alt="Elegant White Lily Bouquet">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>White Lily Elegance Bouquet – 8 stems</h3>
+            <p>Pure white lilies arranged with natural greenery, wrapped in craft paper — simple and graceful.</p>
+            <div class="product-footer">
+                <span class="price">₹2100</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 16 -->
+    <div class="product-card" data-index="16">
+        <div class="product-image">
+            <img src="/cakes img/544b041068a91e5e0b8b02d6171f7c6f.jpg" alt="Floral Monogram Celebration Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Floral Monogram Buttercream Cake – 1 kg</h3>
+            <p>Elegant buttercream finish with hand-piped florals and a subtle monogram for personalization.</p>
+            <div class="product-footer">
+                <span class="price">₹2200</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 17 -->
+    <div class="product-card" data-index="17">
+        <div class="product-image">
+            <img src="/cakes img/1207fb5c9e4c5a5149a8fb1f8ae69114.jpg" alt="Chocolate Drip Celebration Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Chocolate Drip Celebration Cake – 1.5 kg</h3>
+            <p>Decadent chocolate drip with smooth ganache and a sprinkling of chocolate pearls.</p>
+            <div class="product-footer">
+                <span class="price">₹3300</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 18 -->
+    <div class="product-card" data-index="18">
+        <div class="product-image">
+            <img src="/cakes img/d602c33ad9463f2f98a83d94d7a6830f.jpg" alt="Blueberry Lavender Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Blueberry Lavender Mousse Cake – 1.2 kg</h3>
+            <p>Light mousse cake layered with blueberry compote and lavender-infused cream, finished with berries.</p>
+            <div class="product-footer">
+                <span class="price">₹3432</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 19 -->
+    <div class="product-card" data-index="19">
+        <div class="product-image">
+            <img src="/cakes img/3e03b621a54739e9c24ec7f28e208855.jpg" alt="Chocolate Sphere Delight Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Chocolate Sphere Delight Cake – 1.5 kg</h3>
+            <p>A luxurious chocolate cake wrapped in crispy wafer rolls and topped with floating chocolate spheres.</p>
+            <div class="product-footer">
+                <span class="price">₹3960</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 20 -->
+    <div class="product-card" data-index="20">
+        <div class="product-image">
+            <img src="/cakes img/e44f09e965e6484ec62aef2d555258db.jpg" alt="Tom & Jerry Cartoon Celebration Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Tom &amp; Jerry Cartoon Celebration Cake – 3 kg</h3>
+            <p>Premium handcrafted fondant cake featuring an adorable Tom &amp; Jerry theme — perfect for kids’ birthdays.</p>
+            <div class="product-footer">
+                <span class="price">₹10560</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 21 -->
+    <div class="product-card" data-index="21">
+        <div class="product-image">
+            <img src="/cakes img/02b95b979b8852e17911b39b86e93c00.jpg" alt="Enchanted Mermaid Fantasy Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Enchanted Mermaid Fantasy Cake – 2.5 kg</h3>
+            <p>A magical mermaid-themed cake decorated with seashells, pearls and a stunning mermaid figurine.</p>
+            <div class="product-footer">
+                <span class="price">₹8250</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 22 -->
+    <div class="product-card" data-index="22">
+        <div class="product-image">
+            <img src="/cakes img/0652ab76d70904ae3438e8eb647c72c9.jpg" alt="Pastel Mermaid Tail Dream Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Pastel Mermaid Tail Dream Cake – 2.5 kg</h3>
+            <p>A pastel ocean-inspired design with multiple mermaid tails and elegant fondant sea elements.</p>
+            <div class="product-footer">
+                <span class="price">₹8250</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 23 -->
+    <div class="product-card" data-index="23">
+        <div class="product-image">
+            <img src="/cakes img/2466f238854799f4134a1ffbdfc6dc91.jpg" alt="Luxe Unicorn Blossom Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Luxe Unicorn Blossom Cake – 3 kg</h3>
+            <p>A premium two-tier unicorn cake with handcrafted pastel roses and a gold horn.</p>
+            <div class="product-footer">
+                <span class="price">₹11220</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 24 -->
+    <div class="product-card" data-index="24">
+        <div class="product-image">
+            <img src="/cakes img/216b4018c2863f7d66e1ede4cdbac79c.jpg" alt="Midnight Black Luxury Ribbon Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Midnight Black Luxury Ribbon Cake – 1.2 kg</h3>
+            <p>A bold &amp; elegant black cake decorated with metallic balls and a premium satin bow.</p>
+            <div class="product-footer">
+                <span class="price">₹3168</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 25 -->
+    <div class="product-card" data-index="25">
+        <div class="product-image">
+            <img src="/cakes img/587c705d1aa02714110861b880a5aba9.jpg" alt="Baby Bear & Hot-Air Balloon First Birthday Cake">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Baby Bear &amp; Hot-Air Balloon First Birthday Cake – 2.5 kg</h3>
+            <p>A soft pastel-themed cake with 3D teddy bear, clouds and hot-air balloon decorations.</p>
+            <div class="product-footer">
+                <span class="price">₹8250</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 26 -->
+    <div class="product-card" data-index="26">
+        <div class="product-image">
+            <img src="/cakes img/538fa4c881007be6fd324e4d26b2fd6d.jpg" alt="White Lily & Red Rose Accent Bouquet">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>White Lily &amp; Red Rose Accent Bouquet – 10 stems</h3>
+            <p>Mixed white lilies and red roses with decorative filler and a bold red ribbon — great for gifting.</p>
+            <div class="product-footer">
+                <span class="price">₹2000</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+    <!-- 1 -->
+    <div class="product-card" data-index="0">
+        <div class="product-image">
+            <img src="/cakes img/e8d65d2bc8c3f8699afd00ded8669fb8.jpg" alt="Blue Orchid & White Ribbon Bouquet">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Blue Orchid & White Ribbon Bouquet – 12 stems</h3>
+            <p>Vibrant blue orchids arranged with soft white paper wrap and a satin bow — elegant & fresh.</p>
+            <div class="product-footer">
+                <span class="price">₹1800</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="product-card" data-index="1">
+        <div class="product-image">
+            <img src="/cakes img/4cedd2e254ce1a7705b8a91571e96a9a.jpg" alt="Midnight Blue Rose Bouquet">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Midnight Blue Rose Bouquet – 15 stems</h3>
+            <p>Deep blue and red mixed roses wrapped in black tissue for a dramatic, luxurious look.</p>
+            <div class="product-footer">
+                <span class="price">₹2500</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="product-card" data-index="2">
+        <div class="product-image">
+            <img src="/cakes img/77e48104ff0473d49f39134243a01640.jpg" alt="Keepsake Photo Bouquet">
+            <button class="wishlist-btn">❤️</button>
+            <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+            <h3>Keepsake Photo Bouquet with Roses – 12 stems</h3>
+            <p>Mixed rose bouquet with attached photo frames — a personalized gift for special moments.</p>
+            <div class="product-footer">
+                <span class="price">₹2300</span>
+                <button class="add-to-cart-btn"><span class="cart-icon">🛒</span><span>Add to Cart</span></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+            
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why BloomyBay?</h2>
+                <p>At BloomyBay, we believe every moment deserves to bloom. From flowers to cakes, we bring freshness, sweetness, and happiness to your doorstep. Our commitment to quality and customer satisfaction makes us the perfect choice for all your celebrations.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card" data-index="0">
+                    <div class="feature-icon">❤️</div>
+                    <h3>Made with Love</h3>
+                    <p>Every cake is crafted with passion and attention to detail</p>
+                </div>
+
+                <div class="feature-card" data-index="1">
+                    <div class="feature-icon">🎁</div>
+                    <h3>Perfect Gifts</h3>
+                    <p>Beautiful presentation for all your special occasions</p>
+                </div>
+
+                <div class="feature-card" data-index="2">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Fresh delivery to your doorstep within hours</p>
+                </div>
+
+                <div class="feature-card" data-index="3">
+                    <div class="feature-icon">⏰</div>
+                    <h3>Always Fresh</h3>
+                    <p>Made fresh daily with the finest ingredients</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get in Touch</h2>
+                <p>Have a question or want to place a custom order? We'd love to hear from you!</p>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>hello@bloomybay.com</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+91 98765 43210</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div>
+                            <h4>Address</h4>
+                            <p>123 Sweet Street, Bloom City, BC 12345</p>
+                        </div>
+                    </div>
+
+                    <div class="business-hours">
+                        <h4>Business Hours</h4>
+                        <p>Monday - Saturday: 9:00 AM - 8:00 PM</p>
+                        <p>Sunday: 10:00 AM - 6:00 PM</p>
+                    </div>
+                </div>
+
+                <form class="contact-form" id="contact-form">
+                    <h3>Send us a Message</h3>
+                    
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required rows="5" placeholder="Tell us about your requirements..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>📤</span>
+                        <span>Send Message</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="flower-icon">🌸</span>
+                        <h3>BloomyBay</h3>
+                    </div>
+                    <p>Making every occasion blossom with fresh blooms, sweet delights, and happy moments. Your trusted partner for all celebrations.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘</a>
+                        <a href="#" class="social-link">📷</a>
+                        <a href="#" class="social-link">🐦</a>
+                        <a href="#" class="social-link">📧</a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#">Birthday Cakes</a></li>
+                        <li><a href="#">Wedding Cakes</a></li>
+                        <li><a href="#">Anniversary</a></li>
+                        <li><a href="#">Custom Orders</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 BloomyBay. All rights reserved. Made with ❤️ for sweet moments.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
